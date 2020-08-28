@@ -38,6 +38,7 @@ let tacotruck = sprites.create(img`
 `)
 tacotruck.setPosition(20, scene.screenHeight() / 2)
 tacotruck.setFlag(SpriteFlag.StayInScreen, true)
+tacotruck.setKind(SpriteKind.Player)
 //  Configure Player Controls
 controller.moveSprite(tacotruck, 150, 150)
 //  Generate Enemies
@@ -62,6 +63,7 @@ game.onUpdateInterval(900, function on_update_interval() {
     `)
     taco.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
     taco.setVelocity(-50, 0)
+    taco.setKind(SpriteKind.Enemy)
 })
 //  Shoot enemies with projectiles
 controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function on_button_event_a_pressed() {
@@ -83,4 +85,15 @@ controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     . . . 2 2 e e 4 4 4 2 e e . . .
     . . . . . 2 2 e e e e . . . . .
     `, tacotruck, 50, 0)
+})
+//  Lose life when hit
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_overlap2(sprite: Sprite, otherSprite: Sprite) {
+    otherSprite.destroy()
+    info.changeLifeBy(-1)
+})
+//  Destroy Taco when blasted
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function on_taco_blasted(sprite: Sprite, otherSprite: Sprite) {
+    sprite.destroy()
+    otherSprite.destroy(effects.confetti, 100)
+    info.changeScoreBy(1)
 })

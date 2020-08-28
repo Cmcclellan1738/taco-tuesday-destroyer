@@ -39,6 +39,7 @@ tacotruck = sprites.create(img("""
 """))
 tacotruck.set_position(20, scene.screen_height()/2)
 tacotruck.set_flag(SpriteFlag.StayInScreen, True)
+tacotruck.set_kind(SpriteKind.player)
 
 # Configure Player Controls
 controller.move_sprite(tacotruck, 150, 150)
@@ -65,6 +66,8 @@ def on_update_interval():
     """))
     taco.set_position(scene.screen_width(), randint(0, scene.screen_height()))
     taco.set_velocity(-50, 0)
+    taco.set_kind(SpriteKind.enemy)
+
 game.on_update_interval(900, on_update_interval)
 
 # Shoot enemies with projectiles
@@ -89,3 +92,18 @@ def on_button_event_a_pressed():
     """), tacotruck, 50, 0)
     
 controller.player1.on_button_event(ControllerButton.A, ControllerButtonEvent.PRESSED, on_button_event_a_pressed)
+
+# Lose life when hit
+def on_overlap2(sprite, otherSprite):
+    otherSprite.destroy()
+    info.change_life_by(-1)
+
+sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_overlap2)
+
+# Destroy Taco when blasted
+def on_taco_blasted(sprite, otherSprite):
+    sprite.destroy()
+    otherSprite.destroy(effects.confetti, 100)
+    info.change_score_by(1)
+
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemy, on_taco_blasted)
