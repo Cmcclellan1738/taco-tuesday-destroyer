@@ -92,18 +92,3 @@ def on_button_event_a_pressed():
     """), tacotruck, 50, 0)
     
 controller.player1.on_button_event(ControllerButton.A, ControllerButtonEvent.PRESSED, on_button_event_a_pressed)
-
-# Lose life when hit
-def on_overlap2(sprite, otherSprite):
-    otherSprite.destroy()
-    info.change_life_by(-1)
-
-sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_overlap2)
-
-# Destroy Taco when blasted
-def on_taco_blasted(sprite, otherSprite):
-    sprite.destroy()
-    otherSprite.destroy(effects.confetti, 100)
-    info.change_score_by(1)
-
-sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemy, on_taco_blasted)

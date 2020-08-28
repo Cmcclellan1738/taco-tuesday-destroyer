@@ -86,14 +86,3 @@ controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     . . . . . 2 2 e e e e . . . . .
     `, tacotruck, 50, 0)
 })
-//  Lose life when hit
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_overlap2(sprite: Sprite, otherSprite: Sprite) {
-    otherSprite.destroy()
-    info.changeLifeBy(-1)
-})
-//  Destroy Taco when blasted
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function on_taco_blasted(sprite: Sprite, otherSprite: Sprite) {
-    sprite.destroy()
-    otherSprite.destroy(effects.confetti, 100)
-    info.changeScoreBy(1)
-})
